@@ -2,18 +2,27 @@ package entities;
 
 import entities.enums.Status;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Task {
+    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    private static int classid = 1;
+    private int id;
     private String description;
     private Date dueDate;
     private boolean completed;
     private Status status;
 
     public Task(String description, Date dueDate) {
+        this.id = classid++;
         this.description = description;
         this.dueDate = dueDate;
         status = Status.PENDING;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getDescription() {
@@ -34,6 +43,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return description + " " + dueDate;
+        return id + ": " + description + " " + sdf.format(dueDate);
     }
+
 }
