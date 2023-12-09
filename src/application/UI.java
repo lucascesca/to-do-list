@@ -15,7 +15,8 @@ public class UI {
     public static void menu(Scanner sc) throws ParseException {
         List<Task> tasks = new ArrayList<>();
         int ch;
-        System.out.println("Bem-vindo, selecione uma das opções:");
+        System.out.println("Bem-vindo");
+        System.out.println();
 
         do {
             System.out.println("1. Adicionar");
@@ -23,14 +24,15 @@ public class UI {
             System.out.println("3. Remover");
             System.out.println("4. Mudar Status");
             System.out.println("5. Para sair");
+            System.out.println();
+            System.out.print("Selecione uma das opções: ");
             ch = sc.nextInt();
 
             switch (ch) {
                 case 1:
-                    //addTasksMenu(tasks, sc);
+                    addTasksMenu(tasks, sc);
                     break;
                 case 2:
-                    UI.clearScreen();
                     //UI.printTasksMenu(tasks);
                     break;
                 case 3:
@@ -43,6 +45,28 @@ public class UI {
                     break;
             }
         } while (ch != 5);
+    }
+
+    private static void addTasksMenu(List<Task> tasks, Scanner sc) throws ParseException {
+        clearScreen();
+        char ch;
+        do {
+            System.out.print("Descrição: ");
+            sc.nextLine();
+            String description = sc.nextLine();
+            System.out.print("Data da tarefa: ");
+            Date date = sdf.parse(sc.next());
+
+            tasks.add(new Task(description, date));
+
+            System.out.println();
+            System.out.println("Tarefa adicionada com sucesso");
+            System.out.println();
+
+            System.out.print("Deseja continuar (y/n): ");
+            ch = sc.next().charAt(0);
+            clearScreen();
+        } while (Character.toLowerCase(ch) != 'n');
     }
 
     //https://stackoverflow.com/questions/2979383/java-clear-the-console
