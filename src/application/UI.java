@@ -15,8 +15,6 @@ public class UI {
     public static void menu(Scanner sc) throws ParseException {
         List<Task> tasks = new ArrayList<>();
         int ch;
-        System.out.println("Bem-vindo");
-        System.out.println();
 
         do {
             System.out.println("1. Adicionar");
@@ -27,13 +25,16 @@ public class UI {
             System.out.println();
             System.out.print("Selecione uma das opções: ");
             ch = sc.nextInt();
+            clearScreen();
 
             switch (ch) {
                 case 1:
                     addTasksMenu(tasks, sc);
                     break;
                 case 2:
-                    //UI.printTasksMenu(tasks);
+                    do
+                        printTasksMenu(tasks);
+                    while (check(sc));
                     break;
                 case 3:
                     //removeTaskMenu(tasks, sc);
@@ -48,8 +49,6 @@ public class UI {
     }
 
     private static void addTasksMenu(List<Task> tasks, Scanner sc) throws ParseException {
-        clearScreen();
-        char ch;
         do {
             System.out.print("Descrição: ");
             sc.nextLine();
@@ -64,9 +63,25 @@ public class UI {
             System.out.println();
 
             System.out.print("Deseja continuar (y/n): ");
-            ch = sc.next().charAt(0);
-            clearScreen();
-        } while (Character.toLowerCase(ch) != 'n');
+        } while (check(sc));
+    }
+
+    private static void printTasksMenu(List<Task> tasks) {
+        if (!tasks.isEmpty()) {
+            for (Task t : tasks) {
+                System.out.println(t);
+            }
+        } else System.out.println("Nada para listar");
+
+        System.out.println();
+        System.out.print("Deseja listar novamente (y/n)? ");
+    }
+
+    private static boolean check(Scanner sc) {
+        char ch = sc.next().charAt(0);
+        clearScreen();
+
+        return Character.toLowerCase(ch) != 'n';
     }
 
     //https://stackoverflow.com/questions/2979383/java-clear-the-console
