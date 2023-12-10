@@ -1,6 +1,7 @@
 package application;
 
 import entities.Task;
+import entities.TaskManager;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -12,7 +13,7 @@ import java.util.Scanner;
 public class UI {
     static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
-    public static void menu(Scanner sc) throws ParseException {
+    public static void menu(TaskManager taskManager, Scanner sc) throws ParseException {
         List<Task> tasks = new ArrayList<>();
         int ch;
 
@@ -29,15 +30,15 @@ public class UI {
 
             switch (ch) {
                 case 1:
-                    addTasksMenu(tasks, sc);
+                    addTasksMenu(taskManager, sc);
                     break;
                 case 2:
                     do
-                        printTasksMenu(tasks);
+                        printTasksMenu(taskManager.getTasks());
                     while (check(sc));
                     break;
                 case 3:
-                    //removeTaskMenu(tasks, sc);
+                    removeTaskMenu(taskManager, sc);
                     break;
                 case 4:
                     //statusMenu(tasks, sc);
@@ -48,7 +49,7 @@ public class UI {
         } while (ch != 5);
     }
 
-    private static void addTasksMenu(List<Task> tasks, Scanner sc) throws ParseException {
+    private static void addTasksMenu(TaskManager tasks, Scanner sc) throws ParseException {
         do {
             System.out.print("Descrição: ");
             sc.nextLine();
@@ -56,7 +57,7 @@ public class UI {
             System.out.print("Data da tarefa: ");
             Date date = sdf.parse(sc.next());
 
-            tasks.add(new Task(description, date));
+            tasks.addTask(new Task(description, date));
 
             System.out.println();
             System.out.println("Tarefa adicionada com sucesso");
@@ -77,7 +78,19 @@ public class UI {
         System.out.print("Deseja listar novamente (y/n)? ");
     }
 
+    private static void removeTaskMenu(TaskManager tasks, Scanner sc) {
+        do {
+            System.out.print("Digite o ID da tarefa para deletar: ");
+            int id = sc.nextInt();
+            tasks.removeTask(id);
+
+            System.out.println();
+            System.out.println("Deseja continuar (y/n)? ");
+        } while (check(sc));
+    }
+
     private static boolean check(Scanner sc) {
+        // Verifies if the user wants to keep doing the command
         char ch = sc.next().charAt(0);
         clearScreen();
 
