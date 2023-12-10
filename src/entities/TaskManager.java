@@ -12,21 +12,15 @@ public class TaskManager {
     }
 
     public void addTask(Task task) {
-/*        if (task.getId() > tasks.size()) {
-            task.setId(tasks.size() + 1);
-        }*/
         tasks.add(task);
         setTaskId(tasks.size());
     }
 
     public void removeTask(int taskId) {
-        Iterator<Task> iterator = tasks.iterator();
-        while (iterator.hasNext()) {
-            Task task = iterator.next();
-            if (task.getId() == taskId) {
-                iterator.remove();
+        for (int i = 0; i < tasks.size(); i++) {
+            if (tasks.get(i).getId() == taskId) {
+                tasks.remove(tasks.get(i));
                 setTaskId(taskId);
-                break;
             }
         }
     }
@@ -38,6 +32,15 @@ public class TaskManager {
                 task.setId(task.getId() - 1);
             }
         }
+    }
+
+    public boolean hasId(int id) {
+        for (Task t : tasks) {
+            if (t.getId() == id) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public List<Task> getTasks() {

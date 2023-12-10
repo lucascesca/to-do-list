@@ -7,15 +7,17 @@ import java.util.Date;
 
 public class Task {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-    private static int classid = 1;
+    private static int classId = 1;
     private int id;
     private String description;
     private Date dueDate;
     private boolean completed;
     private Status status;
 
+    public Task() {}
+
     public Task(String description, Date dueDate) {
-        this.id = classid++;
+        this.id = classId++;
         this.description = description;
         this.dueDate = dueDate;
         status = Status.PENDING;

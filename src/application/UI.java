@@ -33,9 +33,7 @@ public class UI {
                     addTasksMenu(taskManager, sc);
                     break;
                 case 2:
-                    do
-                        printTasksMenu(taskManager.getTasks());
-                    while (check(sc));
+                    printTasksMenu(taskManager, sc);
                     break;
                 case 3:
                     removeTaskMenu(taskManager, sc);
@@ -67,26 +65,48 @@ public class UI {
         } while (check(sc));
     }
 
-    private static void printTasksMenu(List<Task> tasks) {
+    private static void printTasksMenu(TaskManager taskManager, Scanner sc) {
+        do {
+
+            printTasks(taskManager.getTasks());
+
+            System.out.println();
+            System.out.print("Deseja listar novamente (y/n)? ");
+        } while (check(sc));
+    }
+
+    private static void printTasks(List<Task> tasks) {
         if (!tasks.isEmpty()) {
             for (Task t : tasks) {
                 System.out.println(t);
             }
-        } else System.out.println("Nada para listar");
-
-        System.out.println();
-        System.out.print("Deseja listar novamente (y/n)? ");
+        } else System.out.println("A lista está vazia");
     }
 
-    private static void removeTaskMenu(TaskManager tasks, Scanner sc) {
-        do {
-            System.out.print("Digite o ID da tarefa para deletar: ");
-            int id = sc.nextInt();
-            tasks.removeTask(id);
+    private static void removeTaskMenu(TaskManager tasks, Scanner sc) throws ParseException {
+        if (tasks.getTasks().isEmpty()) {
+            aux(tasks, sc);
+        }
+        else {
+            do {
+                printTasks(tasks.getTasks());
 
-            System.out.println();
-            System.out.println("Deseja continuar (y/n)? ");
-        } while (check(sc));
+                System.out.print("Digite o ID da tarefa para deletar: ");
+                int id = sc.nextInt();
+                tasks.removeTask(id);
+
+                System.out.println();
+                System.out.println("Deseja continuar (y/n)? ");
+            } while (check(sc));
+        }
+    }
+
+    private static void aux(TaskManager tasks, Scanner sc) throws ParseException {
+        System.out.print("Digite 1 para adicionar uma tarefa ou 0 para voltar: ");
+        int ch = sc.nextInt();
+        if (ch == 1) {
+            addTasksMenu(tasks, sc);
+        }
     }
 
     private static boolean check(Scanner sc) {
