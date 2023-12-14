@@ -4,17 +4,15 @@ import entities.Task;
 import entities.TaskManager;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
 public class UI {
-    static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 
     public static void menu(TaskManager taskManager, Scanner sc) throws ParseException {
-        List<Task> tasks = new ArrayList<>();
         int ch;
 
         do {
@@ -39,7 +37,7 @@ public class UI {
                     removeTaskMenu(taskManager, sc);
                     break;
                 case 4:
-                    //statusMenu(tasks, sc);
+                    //statusMenu(taskManager, sc);
                     break;
                 default:
                     break;
@@ -52,8 +50,8 @@ public class UI {
             System.out.print("Descrição: ");
             sc.nextLine();
             String description = sc.nextLine();
-            System.out.print("Data da tarefa: ");
-            Date date = sdf.parse(sc.next());
+            System.out.print("Data e hora da tarefa: ");
+            LocalDateTime date = LocalDateTime.parse(sc.nextLine(), fmt);
 
             tasks.addTask(new Task(description, date));
 
@@ -65,13 +63,31 @@ public class UI {
         } while (check(sc));
     }
 
-    private static void printTasksMenu(TaskManager taskManager, Scanner sc) {
+    private static void printTasksMenu(TaskManager taskManager, Scanner sc) throws ParseException {
         do {
+            List<Task> tasks = taskManager.getTasks();
+            if (tasks.isEmpty()) {
+                printTasks(tasks);
+                System.out.println();
+                aux(taskManager, sc);
+                break;
+            }
+            else {
+                System.out.println("Quais tarefas deseja listar?");
+                System.out.println("1. Realizadas");
+                System.out.println("2. Em andamento");
+                System.out.println("3. Pendentes");
+                System.out.println("4. Todas");
+                System.out.print("Digite sua escolha: ");
+                int ch = sc.nextInt();
 
-            printTasks(taskManager.getTasks());
+                tasks = (ch == 4) ? tasks : taskManager.getTasks(ch);
 
-            System.out.println();
-            System.out.print("Deseja listar novamente (y/n)? ");
+                printTasks(tasks);
+
+                System.out.println();
+                System.out.print("Deseja listar novamente (y/n)? ");
+            }
         } while (check(sc));
     }
 

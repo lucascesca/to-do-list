@@ -1,7 +1,8 @@
 package entities;
 
+import entities.enums.Status;
+
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class TaskManager {
@@ -9,6 +10,21 @@ public class TaskManager {
 
     public TaskManager() {
         this.tasks = new ArrayList<>();
+    }
+
+    public List<Task> getTasks() {
+        return tasks;
+    }
+
+    public List<Task> getTasks(int listType) {
+        if (listType == 1) {
+            return tasks.stream().filter(x -> x.getStatus() == Status.DONE).toList();
+        }
+        else if (listType == 2) {
+            return tasks.stream().filter(x -> x.getStatus() == Status.ONGOING).toList();
+        }
+        else
+            return tasks.stream().filter(x -> x.getStatus() == Status.PENDING).toList();
     }
 
     public void addTask(Task task) {
@@ -41,9 +57,5 @@ public class TaskManager {
             }
         }
         return false;
-    }
-
-    public List<Task> getTasks() {
-        return tasks;
     }
 }

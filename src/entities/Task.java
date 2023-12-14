@@ -2,21 +2,22 @@ package entities;
 
 import entities.enums.Status;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Task {
-    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+    static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
     private static int classId = 1;
     private int id;
     private String description;
-    private Date dueDate;
+    private LocalDateTime dueDate;
     private boolean completed;
     private Status status;
 
     public Task() {}
 
-    public Task(String description, Date dueDate) {
+    public Task(String description, LocalDateTime dueDate) {
         this.id = classId++;
         this.description = description;
         this.dueDate = dueDate;
@@ -35,7 +36,7 @@ public class Task {
         return description;
     }
 
-    public Date getDueDate() {
+    public LocalDateTime getDueDate() {
         return dueDate;
     }
 
@@ -49,7 +50,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + ": " + description + " " + sdf.format(dueDate);
+        return id + ": " + description + " " + dueDate.format(fmt);
     }
-
 }
