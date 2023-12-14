@@ -17,14 +17,21 @@ public class TaskManager {
     }
 
     public List<Task> getTasks(int listType) {
-        if (listType == 1) {
+/*        if (listType == 1) {
             return tasks.stream().filter(x -> x.getStatus() == Status.DONE).toList();
         }
         else if (listType == 2) {
             return tasks.stream().filter(x -> x.getStatus() == Status.ONGOING).toList();
         }
         else
-            return tasks.stream().filter(x -> x.getStatus() == Status.PENDING).toList();
+            return tasks.stream().filter(x -> x.getStatus() == Status.PENDING).toList();*/
+
+        return switch (listType) {
+            case 1 -> tasks.stream().filter(x -> x.getStatus() == Status.DONE).toList();
+            case 2 -> tasks.stream().filter(x -> x.getStatus() == Status.ONGOING).toList();
+            case 3 -> tasks.stream().filter(x -> x.getStatus() == Status.PENDING).toList();
+            default -> tasks;
+        };
     }
 
     public void addTask(Task task) {
@@ -48,6 +55,11 @@ public class TaskManager {
                 task.setId(task.getId() - 1);
             }
         }
+    }
+
+    public void changeTaskStatus(int id, int status) {
+        Status[] s = Status.values();
+        tasks.get(id).setStatus(s[status]);
     }
 
     public boolean hasId(int id) {

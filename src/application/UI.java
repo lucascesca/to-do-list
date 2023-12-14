@@ -37,7 +37,7 @@ public class UI {
                     removeTaskMenu(taskManager, sc);
                     break;
                 case 4:
-                    //statusMenu(taskManager, sc);
+                    statusMenu(taskManager, sc);
                     break;
                 default:
                     break;
@@ -115,6 +115,28 @@ public class UI {
                 System.out.println("Deseja continuar (y/n)? ");
             } while (check(sc));
         }
+    }
+
+    private static void statusMenu(TaskManager taskManager, Scanner sc) {
+        do {
+            System.out.println("Escolha o id da tarefa desejada:");
+            printTasks(taskManager.getTasks());
+            int id = sc.nextInt();
+            System.out.println();
+            System.out.println("Escolha o novo status para a tarefa:");
+            System.out.println("1. Realizada");
+            System.out.println("2. Em andamento");
+            System.out.println("3. Pendente");
+            int status = sc.nextInt();
+
+            taskManager.changeTaskStatus(id, status - 1);
+
+            System.out.println();
+            System.out.println("Status alterado com sucesso!");
+
+            System.out.println();
+            System.out.println("Deseja continuar (s/n)?");
+        } while (check(sc));
     }
 
     private static void aux(TaskManager tasks, Scanner sc) throws ParseException {
