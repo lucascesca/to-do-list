@@ -4,13 +4,16 @@ import entities.Task;
 import entities.TaskManager;
 
 import java.text.ParseException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Scanner;
 
 public class UI {
-    static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+    static DateTimeFormatter fmt2 = DateTimeFormatter.ofPattern("HH:mm");
 
     public static void menu(TaskManager taskManager, Scanner sc) throws ParseException {
         int ch;
@@ -50,10 +53,12 @@ public class UI {
             System.out.print("Descrição: ");
             sc.nextLine();
             String description = sc.nextLine();
-            System.out.print("Data e hora da tarefa: ");
-            LocalDateTime date = LocalDateTime.parse(sc.nextLine(), fmt);
+            System.out.print("Data da tarefa: ");
+            LocalDate dueDate = LocalDate.parse(sc.nextLine(), fmt);
+            System.out.print("Horário da tarefa: ");
+            LocalTime dueTime = LocalTime.parse(sc.nextLine(), fmt2);
 
-            tasks.addTask(new Task(description, date));
+            tasks.addTask(new Task(description, dueDate, dueTime));
 
             System.out.println();
             System.out.println("Tarefa adicionada com sucesso");
@@ -81,7 +86,7 @@ public class UI {
                 System.out.print("Digite sua escolha: ");
                 int ch = sc.nextInt();
 
-                tasks = (ch == 4) ? tasks : taskManager.getTasks(ch);
+                tasks = taskManager.getTasks(ch);
 
                 printTasks(tasks);
 
@@ -129,7 +134,7 @@ public class UI {
             System.out.println("3. Pendente");
             int status = sc.nextInt();
 
-            taskManager.changeTaskStatus(id, status - 1);
+            taskManager.changeTaskStatus(id, status);
 
             System.out.println();
             System.out.println("Status alterado com sucesso!");

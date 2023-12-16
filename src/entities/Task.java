@@ -3,24 +3,26 @@ package entities;
 import entities.enums.Status;
 
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Task {
-    static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-    private static int classId = 1;
+    static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     private int id;
     private String description;
-    private LocalDateTime dueDate;
+    private LocalDate dueDate;
+    private LocalTime dueTime;
     private boolean completed;
     private Status status;
 
     public Task() {}
 
-    public Task(String description, LocalDateTime dueDate) {
-        this.id = classId++;
+    public Task(String description, LocalDate dueDate, LocalTime dueTime) {
         this.description = description;
         this.dueDate = dueDate;
+        this.dueTime = dueTime;
         status = Status.PENDING;
     }
 
@@ -36,8 +38,8 @@ public class Task {
         return description;
     }
 
-    public LocalDateTime getDueDate() {
-        return dueDate;
+    public LocalDateTime getDueDateTime() {
+        return dueDate.atTime(dueTime);
     }
 
     public boolean isCompleted() {
@@ -52,6 +54,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + ": " + description + " " + dueDate.format(fmt) + " " + status;
+        return id + ": " + description + " " + dueDate.format(fmt) + " " + dueTime + " " + status;
     }
 }
