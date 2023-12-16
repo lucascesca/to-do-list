@@ -16,29 +16,40 @@ public class TaskManager {
     }
 
     public List<Task> getTasks(int listType) {
-        return switch (listType) {
-            case 1 -> tasks.stream().filter(x -> x.getStatus() == Status.DONE).toList();
-            case 2 -> tasks.stream().filter(x -> x.getStatus() == Status.ONGOING).toList();
-            case 3 -> tasks.stream().filter(x -> x.getStatus() == Status.PENDING).toList();
-            default -> tasks;
-        };
+        List<Task> tempList;
+        switch (listType) {
+            case 1:
+                tempList = tasks.stream().filter(x -> x.getStatus() == Status.DONE).toList();
+                tasksOrdered(tempList);
+                return tempList;
+            case 2:
+                tempList = tasks.stream().filter(x -> x.getStatus() == Status.ONGOING).toList();
+                tasksOrdered(tempList);
+                return tempList;
+            case 3:
+                tempList = tasks.stream().filter(x -> x.getStatus() == Status.PENDING).toList();
+                tasksOrdered(tempList);
+                return tempList;
+            default:
+                tasksOrdered(tasks);
+                return tasks;
+        }
     }
 
     public void addTask(Task task) {
         tasks.add(task);
-        tasksOrdered();
     }
 
     public void removeTask(int taskId) {
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).getId() == taskId) {
                 tasks.remove(tasks.get(i));
-                tasksOrdered();
+                tasksOrdered(tasks);
             }
         }
     }
 
-    private void tasksOrdered() {
+    private void tasksOrdered(List<Task> list) {
         tasks.sort(Comparator.comparing(Task::getDueDateTime));
         for (int i = 0; i < tasks.size(); i++) {
             tasks.get(i).setId(i + 1);
