@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,7 +17,8 @@ public class UI {
     static DateTimeFormatter fmt2 = DateTimeFormatter.ofPattern("HH:mm");
 
     public static void menu(TaskManager taskManager, Scanner sc) throws ParseException {
-        int ch;
+        int ch = 0;
+        clearScreen();
 
         do {
             System.out.println("1. Adicionar");
@@ -26,29 +28,38 @@ public class UI {
             System.out.println("5. Para sair");
             System.out.println();
             System.out.print("Selecione uma das opções: ");
-            ch = sc.nextInt();
-            clearScreen();
 
-            switch (ch) {
-                case 1:
-                    addTasksMenu(taskManager, sc);
-                    break;
-                case 2:
-                    printTasksMenu(taskManager, sc);
-                    break;
-                case 3:
-                    removeTaskMenu(taskManager, sc);
-                    break;
-                case 4:
-                    statusMenu(taskManager, sc);
-                    break;
-                default:
-                    break;
+            try {
+                ch = sc.nextInt();
+
+                clearScreen();
+                switch (ch) {
+                    case 1:
+                        addTasksMenu(taskManager, sc);
+                        break;
+                    case 2:
+                        printTasksMenu(taskManager, sc);
+                        break;
+                    case 3:
+                        removeTaskMenu(taskManager, sc);
+                        break;
+                    case 4:
+                        statusMenu(taskManager, sc);
+                        break;
+                    default:
+                        break;
+                }
+            }
+            catch (InputMismatchException e) {
+                clearScreen();
+                sc.nextLine();
+                System.err.println("Digite apenas números de 1 a 5!");
+                System.out.println();
             }
         } while (ch != 5);
     }
 
-    private static void addTasksMenu(TaskManager tasks, Scanner sc) throws ParseException {
+    private static void addTasksMenu(TaskManager tasks, Scanner sc) {
         do {
             System.out.print("Descrição: ");
             sc.nextLine();
