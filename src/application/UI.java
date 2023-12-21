@@ -4,6 +4,7 @@ import entities.Task;
 import entities.TaskManager;
 
 import java.text.ParseException;
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -21,15 +22,14 @@ public class UI {
         clearScreen();
 
         do {
-            System.out.println("1. Adicionar");
-            System.out.println("2. Listar");
-            System.out.println("3. Remover");
-            System.out.println("4. Mudar Status");
-            System.out.println("5. Para sair");
-            System.out.println();
-            System.out.print("Selecione uma das opções: ");
-
             try {
+                System.out.println("1. Adicionar");
+                System.out.println("2. Listar");
+                System.out.println("3. Remover");
+                System.out.println("4. Mudar Status");
+                System.out.println("5. Para sair");
+                System.out.println();
+                System.out.print("Selecione uma das opções: ");
                 ch = sc.nextInt();
 
                 clearScreen();
@@ -60,23 +60,35 @@ public class UI {
     }
 
     private static void addTasksMenu(TaskManager tasks, Scanner sc) {
+        boolean c = true;
+        sc.nextLine();
         do {
-            System.out.print("Descrição: ");
-            sc.nextLine();
-            String description = sc.nextLine();
-            System.out.print("Data da tarefa: ");
-            LocalDate dueDate = LocalDate.parse(sc.nextLine(), fmt);
-            System.out.print("Horário da tarefa: ");
-            LocalTime dueTime = LocalTime.parse(sc.nextLine(), fmt2);
+            try {
+                System.out.print("Descrição: ");
+                String description = sc.nextLine();
+                System.out.print("Data da tarefa: ");
+                LocalDate dueDate = LocalDate.parse(sc.nextLine(), fmt);
+                System.out.print("Horário da tarefa: ");
+                LocalTime dueTime = LocalTime.parse(sc.nextLine(), fmt2);
+                tasks.addTask(new Task(description, dueDate, dueTime));
 
-            tasks.addTask(new Task(description, dueDate, dueTime));
+                System.out.println();
+                System.out.println("Tarefa adicionada com sucesso");
+                System.out.println();
 
-            System.out.println();
-            System.out.println("Tarefa adicionada com sucesso");
-            System.out.println();
+                System.out.print("Deseja continuar (y/n): ");
+                c = check(sc);
+            }
+            catch (DateTimeException e) {
+                System.out.println();
+                System.err.println("Valor inválido");
+                System.out.println();
+                System.out.println("Pressione enter para continuar");
+                sc.nextLine();
+                clearScreen();
+            }
 
-            System.out.print("Deseja continuar (y/n): ");
-        } while (check(sc));
+        } while (c);
     }
 
     private static void printTasksMenu(TaskManager taskManager, Scanner sc) throws ParseException {
