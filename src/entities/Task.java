@@ -17,8 +17,6 @@ public class Task {
     private boolean completed;
     private Status status;
 
-    public Task() {}
-
     public Task(String description, LocalDate dueDate, LocalTime dueTime) {
         this.description = description;
         this.dueDate = dueDate;

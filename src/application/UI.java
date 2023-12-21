@@ -61,19 +61,38 @@ public class UI {
 
     private static void addTasksMenu(TaskManager tasks, Scanner sc) {
         boolean c = true;
-        sc.nextLine();
         do {
             try {
+                sc.nextLine();
+                clearScreen();
                 System.out.print("Descrição: ");
                 String description = sc.nextLine();
                 System.out.print("Data da tarefa: ");
                 LocalDate dueDate = LocalDate.parse(sc.nextLine(), fmt);
+                while (dueDate.isBefore(LocalDate.now())) {
+                    clearScreen();
+                    System.out.println("Data deve ser posterior ou igual à atual");
+                    System.out.println();
+                    System.out.printf("Digite novamente uma data para a tarefa \"%s\": ", description);
+                    dueDate = LocalDate.parse(sc.nextLine(), fmt);
+                }
                 System.out.print("Horário da tarefa: ");
                 LocalTime dueTime = LocalTime.parse(sc.nextLine(), fmt2);
-                tasks.addTask(new Task(description, dueDate, dueTime));
+                while (dueDate.getDayOfMonth() == LocalDate.now().getDayOfMonth() && dueTime.isBefore(LocalTime.now()) ||
+                        dueTime.getMinute() == LocalTime.now().getMinute()) {
+                    clearScreen();
+                    System.out.println("Horário deve ser posterior ao atual");
+                    System.out.println();
+                    System.out.printf("Digite novamente um horário para a tarefa \"%s\": ", description);
+                    dueTime = LocalTime.parse(sc.nextLine(), fmt2);
+                }
+
+                Task task = new Task(description, dueDate, dueTime);
+                tasks.addTask(task);
 
                 System.out.println();
                 System.out.println("Tarefa adicionada com sucesso");
+
                 System.out.println();
 
                 System.out.print("Deseja continuar (y/n): ");
@@ -84,8 +103,6 @@ public class UI {
                 System.err.println("Valor inválido");
                 System.out.println();
                 System.out.println("Pressione enter para continuar");
-                sc.nextLine();
-                clearScreen();
             }
 
         } while (c);
