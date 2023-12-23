@@ -88,15 +88,29 @@ public class UI {
                 }
 
                 Task task = new Task(description, dueDate, dueTime);
-                tasks.addTask(task);
+                int i = tasks.addTask(task);
 
-                System.out.println();
-                System.out.println("Tarefa adicionada com sucesso");
+                switch (i) {
+                    case 0:
+                        System.out.println();
+                        System.out.println("Tarefa adicionada com sucesso");
 
-                System.out.println();
+                        System.out.println();
 
-                System.out.print("Deseja continuar (y/n): ");
-                c = check(sc);
+                        System.out.print("Deseja continuar (y/n): ");
+                        c = check(sc);
+                        break;
+                    case 1:
+                        System.out.println();
+                        System.out.println("Tarefa não adicionada!");
+                        System.out.println();
+                        System.out.printf("O horário fornecido (%s) na data %s já possui uma tarefa\n", task.getDueDateTime().format(fmt2), task.getDueDateTime().format(fmt));
+
+                        System.out.println();
+
+                        System.out.print("Deseja tentar novamente? (y/n): ");
+                        c = check(sc);
+                }
             }
             catch (DateTimeException e) {
                 System.out.println();

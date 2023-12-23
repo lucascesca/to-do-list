@@ -36,8 +36,14 @@ public class TaskManager {
         }
     }
 
-    public void addTask(Task task) {
-        tasks.add(task);
+    public int addTask(Task task) {
+        if (hasDate(task)) {
+            return 1;
+        }
+        else {
+            tasks.add(task);
+            return 0;
+        }
     }
 
     public void removeTask(int taskId) {
@@ -63,9 +69,10 @@ public class TaskManager {
         tasks.get(id).setStatus(s[status]);
     }
 
-    public boolean hasId(int id) {
+    public boolean hasDate(Task task) {
+        // Verifies if the time and date already have a task
         for (Task t : tasks) {
-            if (t.getId() == id) {
+            if (t.getDueDateTime().equals(task.getDueDateTime())) {
                 return true;
             }
         }
