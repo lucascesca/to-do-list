@@ -16,6 +16,7 @@ public class TaskManager {
     }
 
     public List<Task> getTasks(int listType) {
+        tasksOrdered(tasks);
         List<Task> tempList;
         switch (listType) {
             case 1:
@@ -31,7 +32,6 @@ public class TaskManager {
                 tasksOrdered(tempList);
                 return tempList;
             default:
-                tasksOrdered(tasks);
                 return tasks;
         }
     }
@@ -56,9 +56,12 @@ public class TaskManager {
     }
 
     private void tasksOrdered(List<Task> list) {
-        tasks.sort(Comparator.comparing(Task::getDueDateTime));
-        for (int i = 0; i < tasks.size(); i++) {
-            tasks.get(i).setId(i + 1);
+        if (list.size() > 1) {
+            tasks.sort(Comparator.comparing(Task::getDueDateTime));
+        }
+
+        for (int i = 0; i < list.size(); i++) {
+            list.get(i).setId(i + 1);
         }
     }
 

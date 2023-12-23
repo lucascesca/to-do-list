@@ -137,12 +137,20 @@ public class UI {
                 System.out.println("2. Em andamento");
                 System.out.println("3. Pendentes");
                 System.out.println("4. Todas");
+
+                System.out.println();
                 System.out.print("Digite sua escolha: ");
                 int ch = sc.nextInt();
 
-                tasks = taskManager.getTasks(ch);
+                if (ch > 4 || ch < 1) {
+                    System.out.println("Somente números de 1 a 4");
+                }
+                else {
+                    tasks = taskManager.getTasks(ch);
 
-                printTasks(tasks);
+                    clearScreen();
+                    printTasks(tasks);
+                }
 
                 System.out.println();
                 System.out.print("Deseja listar novamente (y/n)? ");
@@ -198,7 +206,7 @@ public class UI {
         } while (check(sc));
     }
 
-    private static void aux(TaskManager tasks, Scanner sc) throws ParseException {
+    private static void aux(TaskManager tasks, Scanner sc) {
         System.out.print("Digite 1 para adicionar uma tarefa ou 0 para voltar: ");
         int ch = sc.nextInt();
         if (ch == 1) {
