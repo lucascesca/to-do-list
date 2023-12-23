@@ -6,7 +6,6 @@ import entities.TaskManager;
 import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.InputMismatchException;
@@ -18,7 +17,7 @@ public class UI {
     static DateTimeFormatter fmt2 = DateTimeFormatter.ofPattern("HH:mm");
 
     public static void menu(TaskManager taskManager, Scanner sc) throws ParseException {
-        int ch = 0;
+        int validator = 0;
         clearScreen();
 
         do {
@@ -30,10 +29,10 @@ public class UI {
                 System.out.println("5. Para sair");
                 System.out.println();
                 System.out.print("Selecione uma das opções: ");
-                ch = sc.nextInt();
+                validator = sc.nextInt();
 
                 clearScreen();
-                switch (ch) {
+                switch (validator) {
                     case 1:
                         addTasksMenu(taskManager, sc);
                         break;
@@ -46,17 +45,21 @@ public class UI {
                     case 4:
                         statusMenu(taskManager, sc);
                         break;
+                    case 5:
+                        break;
                     default:
+                        System.out.println("Apenas valores de 1 a 5");
+                        System.out.println();
                         break;
                 }
             }
             catch (InputMismatchException e) {
                 clearScreen();
                 sc.nextLine();
-                System.err.println("Digite apenas números de 1 a 5!");
+                System.err.println("Digite apenas apenas números inteiros!");
                 System.out.println();
             }
-        } while (ch != 5);
+        } while (validator != 5);
     }
 
     private static void addTasksMenu(TaskManager tasks, Scanner sc) {
@@ -143,6 +146,7 @@ public class UI {
                 int ch = sc.nextInt();
 
                 if (ch > 4 || ch < 1) {
+                    System.out.println();
                     System.out.println("Somente números de 1 a 4");
                 }
                 else {
