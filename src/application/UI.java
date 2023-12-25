@@ -18,9 +18,8 @@ public class UI {
 
     public static void menu(TaskManager taskManager, Scanner sc) throws ParseException {
         int validator = 0;
-        clearScreen();
-
         do {
+            clearScreen();
             try {
                 System.out.println("1. Adicionar");
                 System.out.println("2. Listar");
@@ -157,7 +156,7 @@ public class UI {
                 }
 
                 System.out.println();
-                System.out.print("Deseja listar novamente (y/n)? ");
+                System.out.print("Deseja listar novamente (s/n)? ");
             }
         } while (check(sc));
     }
@@ -170,22 +169,34 @@ public class UI {
         } else System.out.println("A lista está vazia");
     }
 
-    private static void removeTaskMenu(TaskManager tasks, Scanner sc) throws ParseException {
-        if (tasks.getTasks().isEmpty()) {
-            aux(tasks, sc);
-        }
-        else {
-            do {
-                printTasks(tasks.getTasks());
+    private static void removeTaskMenu(TaskManager taskManager, Scanner sc) throws ParseException {
+        do {
+            try {
+                if (taskManager.getTasks().isEmpty()) {
+                    printTasks(taskManager.getTasks());
+                    System.out.println();
+                    aux(taskManager, sc);
+                    break;
+                } else {
 
-                System.out.print("Digite o ID da tarefa para deletar: ");
-                int id = sc.nextInt();
-                tasks.removeTask(id);
+                    printTasks(taskManager.getTasks());
 
+                    System.out.println();
+                    System.out.print("Digite o ID da tarefa para deletar: ");
+                    int id = sc.nextInt();
+
+                    clearScreen();
+                    System.out.printf("Tarefa %s removida com sucesso!\n", taskManager.removeTask(id).getDescription());
+
+                    System.out.println();
+                    System.out.print("Deseja continuar (s/n)? ");
+                }
+            } catch (NullPointerException e) {
+                System.out.println("ID digitado inexistente!");
                 System.out.println();
-                System.out.println("Deseja continuar (y/n)? ");
-            } while (check(sc));
-        }
+                System.out.print("Deseja tentar novamente (s/n)? ");
+            }
+        } while (check(sc));
     }
 
     private static void statusMenu(TaskManager taskManager, Scanner sc) {
@@ -206,7 +217,7 @@ public class UI {
             System.out.println("Status alterado com sucesso!");
 
             System.out.println();
-            System.out.println("Deseja continuar (s/n)?");
+            System.out.print("Deseja continuar (s/n)?");
         } while (check(sc));
     }
 

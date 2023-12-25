@@ -12,6 +12,7 @@ public class TaskManager {
     }
 
     public List<Task> getTasks() {
+        tasksOrdered(tasks);
         return tasks;
     }
 
@@ -55,13 +56,16 @@ public class TaskManager {
         }
     }
 
-    public void removeTask(int taskId) {
+    public Task removeTask(int taskId) {
+        Task task = null;
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).getId() == taskId) {
-                tasks.remove(tasks.get(i));
+                task = tasks.remove(i);
                 tasksOrdered(tasks);
             }
         }
+
+        return task;
     }
 
     private void tasksOrdered(List<Task> list) {
