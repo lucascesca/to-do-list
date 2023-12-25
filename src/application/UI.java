@@ -74,45 +74,45 @@ public class UI {
                 LocalDate dueDate = LocalDate.parse(sc.nextLine(), fmt);
                 while (dueDate.isBefore(LocalDate.now())) {
                     clearScreen();
-                    System.out.println("Data deve ser posterior ou igual à atual");
+                    System.out.printf("Data deve ser posterior ou igual à %s\n", LocalDate.now().format(fmt));
                     System.out.println();
                     System.out.printf("Digite novamente uma data para a tarefa \"%s\": ", description);
                     dueDate = LocalDate.parse(sc.nextLine(), fmt);
+                    clearScreen();
                 }
                 System.out.print("Horário da tarefa: ");
                 LocalTime dueTime = LocalTime.parse(sc.nextLine(), fmt2);
                 while (dueDate.getDayOfMonth() == LocalDate.now().getDayOfMonth() && dueTime.isBefore(LocalTime.now()) ||
                         dueTime.getMinute() == LocalTime.now().getMinute()) {
                     clearScreen();
-                    System.out.println("Horário deve ser posterior ao atual");
+                    System.out.printf("Horário deve ser posterior a %s\n", LocalTime.now().format(fmt2));
                     System.out.println();
                     System.out.printf("Digite novamente um horário para a tarefa \"%s\": ", description);
                     dueTime = LocalTime.parse(sc.nextLine(), fmt2);
                 }
 
                 Task task = new Task(description, dueDate, dueTime);
-                int i = tasks.addTask(task);
+                boolean i = tasks.addTask(task);
 
-                switch (i) {
-                    case 0:
-                        System.out.println();
-                        System.out.println("Tarefa adicionada com sucesso");
+                if (i) {
+                    clearScreen();
+                    System.out.printf("Tarefa \"%s\" adicionada com sucesso\n", task.getDescription());
 
-                        System.out.println();
+                    System.out.println();
 
-                        System.out.print("Deseja continuar (y/n): ");
-                        c = check(sc);
-                        break;
-                    case 1:
-                        System.out.println();
-                        System.out.println("Tarefa não adicionada!");
-                        System.out.println();
-                        System.out.printf("O horário fornecido (%s) na data %s já possui uma tarefa\n", task.getDueDateTime().format(fmt2), task.getDueDateTime().format(fmt));
+                    System.out.print("Deseja adicionar novamente (s/n)? ");
+                    c = check(sc);
+                } else {
+                    System.out.println();
+                    System.out.println("Tarefa não adicionada!");
+                    System.out.println();
+                    task = tasks.getSpecificTask(task);
+                    System.out.printf("Tarefa \"%s\" já está agendada para %s %s.\n", task.getDescription(), task.getDueDateTime().format(fmt), task.getDueDateTime().format(fmt2));
 
-                        System.out.println();
+                    System.out.println();
 
-                        System.out.print("Deseja tentar novamente? (y/n): ");
-                        c = check(sc);
+                    System.out.print("Deseja tentar novamente (s/n)? ");
+                    c = check(sc);
                 }
             }
             catch (DateTimeException e) {

@@ -36,13 +36,22 @@ public class TaskManager {
         }
     }
 
-    public int addTask(Task task) {
+    public Task getSpecificTask(Task other) {
+        for (Task task : tasks) {
+            if (task.getDueDateTime().equals(other.getDueDateTime())) {
+                return task;
+            }
+        }
+        return other;
+    }
+
+    public boolean addTask(Task task) {
         if (hasDate(task)) {
-            return 1;
+            return false;
         }
         else {
             tasks.add(task);
-            return 0;
+            return true;
         }
     }
 
