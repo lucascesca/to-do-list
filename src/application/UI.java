@@ -81,8 +81,8 @@ public class UI {
                 }
                 System.out.print("Horário da tarefa: ");
                 LocalTime dueTime = LocalTime.parse(sc.nextLine(), fmt2);
-                while (dueDate.getDayOfMonth() == LocalDate.now().getDayOfMonth() && dueTime.isBefore(LocalTime.now()) ||
-                        dueTime.getMinute() == LocalTime.now().getMinute()) {
+                while (dueDate.equals(LocalDate.now()) && dueTime.isBefore(LocalTime.now())
+                        || dueTime.getMinute() == LocalTime.now().getMinute()) {
                     clearScreen();
                     System.out.printf("Horário deve ser posterior a %s\n", LocalTime.now().format(fmt2));
                     System.out.println();
@@ -186,7 +186,7 @@ public class UI {
                     int id = sc.nextInt();
 
                     clearScreen();
-                    System.out.printf("Tarefa %s removida com sucesso!\n", taskManager.removeTask(id).getDescription());
+                    System.out.printf("Tarefa \"%s\" removida com sucesso!\n", taskManager.removeTask(id).getDescription());
 
                     System.out.println();
                     System.out.print("Deseja continuar (s/n)? ");
@@ -201,23 +201,39 @@ public class UI {
 
     private static void statusMenu(TaskManager taskManager, Scanner sc) {
         do {
-            System.out.println("Escolha o id da tarefa desejada:");
-            printTasks(taskManager.getTasks());
-            int id = sc.nextInt();
-            System.out.println();
-            System.out.println("Escolha o novo status para a tarefa:");
-            System.out.println("1. Realizada");
-            System.out.println("2. Em andamento");
-            System.out.println("3. Pendente");
-            int status = sc.nextInt();
+            try {
+                if (taskManager.getTasks().isEmpty()) {
+                    printTasks(taskManager.getTasks());
+                    System.out.println();
+                    aux(taskManager, sc);
+                    break;
+                }
+                else {
+                    System.out.println("Escolha o id da tarefa desejada:");
+                    printTasks(taskManager.getTasks());
+                    int id = sc.nextInt();
+                    clearScreen();
+                    System.out.printf("Escolha o novo status para a tarefa \"%s\":\n", taskManager.getTasks().get(id - 1).getDescription());
+                    System.out.println("1. Realizada");
+                    System.out.println("2. Em andamento");
+                    System.out.println("3. Pendente");
+                    int status = sc.nextInt();
+                    clearScreen();
 
-            taskManager.changeTaskStatus(id, status);
+                    taskManager.changeTaskStatus(id, status);
 
-            System.out.println();
-            System.out.println("Status alterado com sucesso!");
+                    System.out.printf("Status de \"%s\" alterado com sucesso!\n", taskManager.getTasks().get(id - 1).getDescription());
 
-            System.out.println();
-            System.out.print("Deseja continuar (s/n)?");
+                    System.out.println();
+                    System.out.print("Deseja continuar (s/n)?");
+                }
+            }
+            catch (IndexOutOfBoundsException e) {
+                System.out.println("O valor digitado não está disponível!");
+                System.out.println();
+                System.out.print("Deseja tentar novamente (s/n)? ");
+            }
+
         } while (check(sc));
     }
 
