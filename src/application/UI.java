@@ -128,8 +128,6 @@ public class UI {
         do {
             List<Task> tasks = taskManager.getTasks();
             if (tasks.isEmpty()) {
-                printTasks(tasks);
-                System.out.println();
                 aux(taskManager, sc);
                 break;
             }
@@ -152,7 +150,12 @@ public class UI {
                     tasks = taskManager.getTasks(ch);
 
                     clearScreen();
-                    printTasks(tasks);
+                    if (tasks.isEmpty()) {
+                        System.out.println("Esta lista está vazia");
+                    }
+                    else {
+                        printTasks(tasks);
+                    }
                 }
 
                 System.out.println();
@@ -162,19 +165,15 @@ public class UI {
     }
 
     private static void printTasks(List<Task> tasks) {
-        if (!tasks.isEmpty()) {
-            for (Task t : tasks) {
-                System.out.println(t);
-            }
-        } else System.out.println("A lista está vazia");
+        for (Task t : tasks) {
+            System.out.println(t);
+        }
     }
 
     private static void removeTaskMenu(TaskManager taskManager, Scanner sc) throws ParseException {
         do {
             try {
                 if (taskManager.getTasks().isEmpty()) {
-                    printTasks(taskManager.getTasks());
-                    System.out.println();
                     aux(taskManager, sc);
                     break;
                 } else {
@@ -203,8 +202,6 @@ public class UI {
         do {
             try {
                 if (taskManager.getTasks().isEmpty()) {
-                    printTasks(taskManager.getTasks());
-                    System.out.println();
                     aux(taskManager, sc);
                     break;
                 }
@@ -237,11 +234,14 @@ public class UI {
         } while (check(sc));
     }
 
-    private static void aux(TaskManager tasks, Scanner sc) {
+    private static void aux(TaskManager taskManager, Scanner sc) {
+        //printTasks(taskManager.getTasks());
+        System.out.println("A lista está vazia");
+        System.out.println();
         System.out.print("Digite 1 para adicionar uma tarefa ou 0 para voltar: ");
         int ch = sc.nextInt();
         if (ch == 1) {
-            addTasksMenu(tasks, sc);
+            addTasksMenu(taskManager, sc);
         }
     }
 
