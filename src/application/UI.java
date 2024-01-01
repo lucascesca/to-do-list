@@ -256,13 +256,13 @@ public class UI {
     private static String translateStatus(Status status) {
         switch (status) {
             case DONE:
-                return "Realizada";
+                return "Concluída";
             case ONGOING:
                 return "Em andamento";
             default:
                 break;
         }
-        return "Pendente";
+        return "Não concluída";
     }
 
     //https://stackoverflow.com/questions/2979383/java-clear-the-console

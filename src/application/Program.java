@@ -1,8 +1,6 @@
 package application;
 
 import entities.TaskManager;
-
-import java.text.ParseException;
 import java.util.Scanner;
 
 public class Program {
