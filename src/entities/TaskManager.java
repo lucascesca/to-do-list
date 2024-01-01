@@ -5,32 +5,32 @@ import entities.enums.Status;
 import java.util.*;
 
 public class TaskManager {
-    private List<Task> tasks;
+    private final List<Task> tasks;
 
     public TaskManager() {
         this.tasks = new ArrayList<>();
     }
 
     public List<Task> getTasks() {
-        tasksOrdered(tasks);
+        tasksOrdering(tasks);
         return tasks;
     }
 
     public List<Task> getTasks(int listType) {
-        tasksOrdered(tasks);
+        tasksOrdering(tasks);
         List<Task> tempList;
         switch (listType) {
             case 1:
                 tempList = tasks.stream().filter(x -> x.getStatus() == Status.DONE).toList();
-                tasksOrdered(tempList);
+                tasksOrdering(tempList);
                 return tempList;
             case 2:
                 tempList = tasks.stream().filter(x -> x.getStatus() == Status.ONGOING).toList();
-                tasksOrdered(tempList);
+                tasksOrdering(tempList);
                 return tempList;
             case 3:
                 tempList = tasks.stream().filter(x -> x.getStatus() == Status.PENDING).toList();
-                tasksOrdered(tempList);
+                tasksOrdering(tempList);
                 return tempList;
             default:
                 return tasks;
@@ -61,14 +61,15 @@ public class TaskManager {
         for (int i = 0; i < tasks.size(); i++) {
             if (tasks.get(i).getId() == taskId) {
                 task = tasks.remove(i);
-                tasksOrdered(tasks);
+                tasksOrdering(tasks);
             }
         }
 
         return task;
     }
 
-    private void tasksOrdered(List<Task> list) {
+    private void tasksOrdering(List<Task> list) {
+        //Condition added so the program doesn't break if list size equals 0
         if (list.size() > 1) {
             tasks.sort(Comparator.comparing(Task::getDueDateTime));
         }

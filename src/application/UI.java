@@ -2,8 +2,8 @@ package application;
 
 import entities.Task;
 import entities.TaskManager;
+import entities.enums.Status;
 
-import java.text.ParseException;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -16,7 +16,7 @@ public class UI {
     static DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy");
     static DateTimeFormatter fmt2 = DateTimeFormatter.ofPattern("HH:mm");
 
-    public static void menu(TaskManager taskManager, Scanner sc) throws ParseException {
+    public static void menu(TaskManager taskManager, Scanner sc) {
         int validator = 0;
         do {
             clearScreen();
@@ -100,18 +100,19 @@ public class UI {
                     System.out.println();
 
                     System.out.print("Deseja adicionar novamente (s/n)? ");
-                    c = check(sc);
+                    c = userChoice(sc);
                 } else {
                     System.out.println();
                     System.out.println("Tarefa não adicionada!");
                     System.out.println();
                     task = tasks.getSpecificTask(task);
-                    System.out.printf("Tarefa \"%s\" já está agendada para %s %s.\n", task.getDescription(), task.getDueDateTime().format(fmt), task.getDueDateTime().format(fmt2));
+                    System.out.printf("Tarefa \"%s\" já está agendada para %s às %s.\n",
+                            task.getDescription(), task.getDueDateTime().format(fmt), task.getDueDateTime().format(fmt2));
 
                     System.out.println();
 
                     System.out.print("Deseja tentar novamente (s/n)? ");
-                    c = check(sc);
+                    c = userChoice(sc);
                 }
             }
             catch (DateTimeException e) {
@@ -124,11 +125,11 @@ public class UI {
         } while (c);
     }
 
-    private static void printTasksMenu(TaskManager taskManager, Scanner sc) throws ParseException {
+    private static void printTasksMenu(TaskManager taskManager, Scanner sc) {
         do {
             List<Task> tasks = taskManager.getTasks();
             if (tasks.isEmpty()) {
-                aux(taskManager, sc);
+                addShortcut(taskManager, sc);
                 break;
             }
             else {
@@ -161,20 +162,20 @@ public class UI {
                 System.out.println();
                 System.out.print("Deseja listar novamente (s/n)? ");
             }
-        } while (check(sc));
+        } while (userChoice(sc));
     }
 
     private static void printTasks(List<Task> tasks) {
         for (Task t : tasks) {
-            System.out.println(t);
+            System.out.println(t + translateStatus(t.getStatus()));
         }
     }
 
-    private static void removeTaskMenu(TaskManager taskManager, Scanner sc) throws ParseException {
+    private static void removeTaskMenu(TaskManager taskManager, Scanner sc) {
         do {
             try {
                 if (taskManager.getTasks().isEmpty()) {
-                    aux(taskManager, sc);
+                    addShortcut(taskManager, sc);
                     break;
                 } else {
 
@@ -195,14 +196,14 @@ public class UI {
                 System.out.println();
                 System.out.print("Deseja tentar novamente (s/n)? ");
             }
-        } while (check(sc));
+        } while (userChoice(sc));
     }
 
     private static void statusMenu(TaskManager taskManager, Scanner sc) {
         do {
             try {
                 if (taskManager.getTasks().isEmpty()) {
-                    aux(taskManager, sc);
+                    addShortcut(taskManager, sc);
                     break;
                 }
                 else {
@@ -222,7 +223,7 @@ public class UI {
                     System.out.printf("Status de \"%s\" alterado com sucesso!\n", taskManager.getTasks().get(id - 1).getDescription());
 
                     System.out.println();
-                    System.out.print("Deseja continuar (s/n)?");
+                    System.out.print("Deseja continuar (s/n)? ");
                 }
             }
             catch (IndexOutOfBoundsException e) {
@@ -231,11 +232,11 @@ public class UI {
                 System.out.print("Deseja tentar novamente (s/n)? ");
             }
 
-        } while (check(sc));
+        } while (userChoice(sc));
     }
 
-    private static void aux(TaskManager taskManager, Scanner sc) {
-        //printTasks(taskManager.getTasks());
+    private static void addShortcut(TaskManager taskManager, Scanner sc) {
+        //Offers a shortcut for addTaskMenu() if list is empty when functions from 2 to 4 are called.
         System.out.println("A lista está vazia");
         System.out.println();
         System.out.print("Digite 1 para adicionar uma tarefa ou 0 para voltar: ");
@@ -245,12 +246,23 @@ public class UI {
         }
     }
 
-    private static boolean check(Scanner sc) {
-        // Verifies if the user wants to keep doing the command
+    private static boolean userChoice(Scanner sc) {
         char ch = sc.next().charAt(0);
         clearScreen();
 
         return Character.toLowerCase(ch) != 'n';
+    }
+
+    private static String translateStatus(Status status) {
+        switch (status) {
+            case DONE:
+                return "Realizada";
+            case ONGOING:
+                return "Em andamento";
+            default:
+                break;
+        }
+        return "Pendente";
     }
 
     //https://stackoverflow.com/questions/2979383/java-clear-the-console

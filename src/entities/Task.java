@@ -14,7 +14,6 @@ public class Task {
     private String description;
     private LocalDate dueDate;
     private LocalTime dueTime;
-    private boolean completed;
     private Status status;
 
     public Task(String description, LocalDate dueDate, LocalTime dueTime) {
@@ -40,10 +39,6 @@ public class Task {
         return dueDate.atTime(dueTime);
     }
 
-    public boolean isCompleted() {
-        return completed;
-    }
-
     public Status getStatus() {
         return status;
     }
@@ -52,6 +47,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return id + ": " + description + " " + dueDate.format(fmt) + " " + dueTime + " " + status;
+        return id + " - " + description + ": " + dueDate.format(fmt) + " às " + dueTime + " - ";
     }
 }
